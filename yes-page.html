@@ -23,5 +23,19 @@
             Thank you for saying yes! I am so happy to have you.
         </p>
     </div>
+
+    <iframe id="yt-audio" width="0" height="0" src="https://www.youtube.com/embed/qoq8B8ThgEM?autoplay=1&loop=1&playlist=qoq8B8ThgEM&controls=0&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <script>
+        window.addEventListener('load', function() {
+            var iframe = document.getElementById('yt-audio');
+            var iframeWindow = iframe.contentWindow;
+            // Attempt to play the iframe audio by sending postMessage (may not work due to cross-origin)
+            try {
+                iframeWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+            } catch (e) {
+                console.log('Error trying to play iframe audio:', e);
+            }
+        });
+    </script>
 </body>
 </html>
