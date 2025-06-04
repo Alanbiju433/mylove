@@ -43,8 +43,8 @@
           I cherish you—every laugh, every quiet moment, every memory we create. Today, tomorrow, and for all eternity, I long to walk this path with you, hand in hand, heart in heart.
           Will you be my forever?
         </p>
-        <button class="proposal-button" onclick="window.location.href='yes-page.html'">Say Yes 💍</button>
-        <button class="say-no-button" onclick="sayNoAction()">Say No 💀</button>
+        <button class="proposal-button" id="say-yes-button">Say Yes 💍</button>
+        <button class="say-no-button" id="say-no-button">Say No 💀</button>
         <div class="blood-overlay"></div>
         <div class="angel-overlay"></div>
     </div>
@@ -125,6 +125,38 @@
     </script>
     
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sayYesButton = document.getElementById('say-yes-button');
+            const sayNoButton = document.getElementById('say-no-button');
+
+            function saveReply(name, reply) {
+                const replies = JSON.parse(localStorage.getItem('userReplies') || '[]');
+                replies.push({ name: name, reply: reply, timestamp: new Date().toISOString() });
+                localStorage.setItem('userReplies', JSON.stringify(replies));
+            }
+
+            function promptNameAndSave(reply) {
+                const name = prompt('Please enter your name:');
+                if (name && name.trim() !== '') {
+                    saveReply(name.trim(), reply);
+                    if (reply === 'yes') {
+                        window.location.href = 'yes-page.html';
+                    } else if (reply === 'no') {
+                        sayNoAction();
+                    }
+                } else {
+                    alert('Name is required to record your reply.');
+                }
+            }
+
+            sayYesButton.addEventListener('click', function() {
+                promptNameAndSave('yes');
+            });
+
+            sayNoButton.addEventListener('click', function() {
+                promptNameAndSave('no');
+            });
+        });
     </script>
     <iframe width="0" height="0" src="https://www.youtube.com/embed/G8yBNYZS-KI?autoplay=1&loop=1&playlist=G8yBNYZS-KI" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
 </body>
