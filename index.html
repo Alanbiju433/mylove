@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Special Proposal Gift</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="container">
+        <h1> To My Love,</h1>
+        <p class="message">
+          I have crossed the seven seas for you, my heart navigating every tide just to be by your side. You are the rhythm of my heart, the warmth in my soul, and the magic in my days. With every touch, every smile, every whispered word, you make my world more beautiful.
+          I cherish you—every laugh, every quiet moment, every memory we create. Today, tomorrow, and for all eternity, I long to walk this path with you, hand in hand, heart in heart.
+          Will you be my forever?
+
+        </p>
+<button class="proposal-button" onclick="window.location.href='yes-page.html'">Say Yes 💍</button>
+        <button class="say-no-button" onclick="sayNoAction()">Say No 💀</button>
+    <div class="blood-overlay"></div>
+    <div class="angel-overlay"></div>
+    </div>
+    <script>
+        function sayNoAction() {
+            const alertDiv = document.createElement('div');
+            alertDiv.textContent = 'Please think again 💔';
+            alertDiv.style.position = 'fixed';
+            alertDiv.style.top = '20px';
+            alertDiv.style.left = '50%';
+            alertDiv.style.transform = 'translateX(-50%)';
+            alertDiv.style.backgroundColor = 'rgba(0,0,0,0.8)';
+            alertDiv.style.color = 'white';
+            alertDiv.style.padding = '15px 30px';
+            alertDiv.style.borderRadius = '10px';
+            alertDiv.style.fontSize = '1.2rem';
+            alertDiv.style.zIndex = '10000';
+            alertDiv.style.boxShadow = '0 0 10px rgba(255, 0, 0, 0.7)';
+            document.body.appendChild(alertDiv);
+            setTimeout(() => {
+                alertDiv.remove();
+                location.reload();
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
