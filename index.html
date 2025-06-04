@@ -4,23 +4,104 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Special Proposal Gift</title>
+    <meta http-equiv="Permissions-Policy" content="accelerometer=(), gyroscope=(), autoplay=(), encrypted-media=(), picture-in-picture=(), clipboard-write=(), web-share=()" />
     <link rel="stylesheet" href="styles.css" />
+    <style>
+        /* Loading overlay styles */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        #loading-overlay iframe {
+            width: 80vw;
+            height: 45vw; /* 16:9 aspect ratio */
+            max-height: 80vh;
+            max-width: 142vh;
+        }
+        #main-content {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
+    <div id="loading-overlay">
+        <div id="player"></div>
+    </div>
+
+    <div id="main-content" class="container">
         <h1> To My Love,</h1>
         <p class="message">
           I have crossed the seven seas for you, my heart navigating every tide just to be by your side. You are the rhythm of my heart, the warmth in my soul, and the magic in my days. With every touch, every smile, every whispered word, you make my world more beautiful.
           I cherish you—every laugh, every quiet moment, every memory we create. Today, tomorrow, and for all eternity, I long to walk this path with you, hand in hand, heart in heart.
           Will you be my forever?
-
         </p>
-<button class="proposal-button" onclick="window.location.href='yes-page.html'">Say Yes 💍</button>
+        <button class="proposal-button" onclick="window.location.href='yes-page.html'">Say Yes 💍</button>
         <button class="say-no-button" onclick="sayNoAction()">Say No 💀</button>
-    <div class="blood-overlay"></div>
-    <div class="angel-overlay"></div>
+        <div class="blood-overlay"></div>
+        <div class="angel-overlay"></div>
     </div>
+
+    
+
     <script>
+        // Load YouTube IFrame Player API asynchronously
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '360',
+                width: '640',
+                videoId: 'inxGxs8K6HQ',
+                playerVars: {
+                    autoplay: 1,
+                    controls: 0,
+                    modestbranding: 1,
+                    rel: 0,
+                    showinfo: 0,
+                    mute: 0,
+                    start: 9,
+                    end: 29,
+                    disablekb: 1,
+                    fs: 0,
+                    iv_load_policy: 3,
+                    loop: 0
+                },
+                events: {
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerStateChange(event) {
+            // When video ends (state 0), hide loading and show main content
+            if (event.data === YT.PlayerState.ENDED) {
+                document.getElementById('loading-overlay').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+
+                // Play the audio iframe after video ends
+                var iframe = document.querySelector('iframe[width="0"][height="0"]:not([id])');
+                if (iframe && iframe.contentWindow) {
+                    try {
+                        iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                    } catch (e) {
+                        console.log('Error trying to play iframe audio:', e);
+                    }
+                }
+            }
+        }
+
         function sayNoAction() {
             const alertDiv = document.createElement('div');
             alertDiv.textContent = 'Please think again 💔';
@@ -42,5 +123,9 @@
             }, 2000);
         }
     </script>
+    
+    <script>
+    </script>
+    <iframe width="0" height="0" src="https://www.youtube.com/embed/G8yBNYZS-KI?autoplay=1&loop=1&playlist=G8yBNYZS-KI" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
 </body>
 </html>
