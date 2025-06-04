@@ -1,10 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Yes Page</title>
+</head>
+<body>
+
         <link rel="stylesheet" href="yes-page-styles.css" />
+        <style>
+            #reply-form {
+                margin-top: 20px;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                max-width: 400px;
+            }
+            #reply-form label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+            #reply-form input[type="text"],
+            #reply-form textarea {
+                width: 100%;
+                padding: 8px;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+                box-sizing: border-box;
+            }
+            #reply-form button {
+                padding: 8px 16px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 3px;
+                cursor: pointer;
+            }
+            #reply-form button:hover {
+                background-color: #45a049;
+            }
+            #saved-replies {
+                margin-top: 20px;
+                max-width: 400px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                padding: 10px;
+                display: none;
+                background-color: #f9f9f9;
+                color: red;
+            }
+            #toggle-replies {
+                margin-top: 10px;
+                cursor: pointer;
+                color: #007BFF;
+                text-decoration: underline;
+                background: none;
+                border: none;
+                font-size: 1em;
+            }
+            .reply-entry {
+                border-bottom: 1px solid #ddd;
+                padding: 5px 0;
+            }
+            .reply-entry:last-child {
+                border-bottom: none;
+            }
+            .reply-name {
+                font-weight: bold;
+            }
+            .reply-text {
+                margin-left: 10px;
+            }
+        </style>
     </head>
 <body>
     <div class="container">
@@ -22,7 +85,81 @@
         <p class="message">
             Thank you for saying yes! I am so happy to have you.
         </p>
-    </div>
+
+        <button id="toggle-replies" style="margin-top: 20px; display:none;">Show Saved Replies</button>
+        <div id="saved-replies" style="display:none; max-height: 300px; overflow-y: auto; background: #f9f9f9; border: 1px solid #ccc; padding: 10px; margin-top: 10px;"></div>
+
+
+    <iframe id="yt-audio" width="0" height="0" src="https://www.youtube.com/embed/qoq8B8ThgEM?autoplay=1&loop=1&playlist=qoq8B8ThgEM&controls=0&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <script>
+        window.addEventListener('load', function() {
+            var iframe = document.getElementById('yt-audio');
+            var iframeWindow = iframe.contentWindow;
+            // Attempt to play the iframe audio by sending postMessage (may not work due to cross-origin)
+            try {
+                iframeWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+            } catch (e) {
+                console.log('Error trying to play iframe audio:', e);
+            }
+
+            const toggleButton = document.getElementById('toggle-replies');
+            const savedRepliesDiv = document.getElementById('saved-replies');
+
+            function escapeHtml(text) {
+                var map = {
+                    '&': '&amp;',
+                    '<': '<',
+                    '>': '>',
+                    '"': '"',
+                    "'": '&#039;'
+                };
+                return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+            }
+
+            function loadReplies() {
+                const replies = JSON.parse(localStorage.getItem('userReplies') || '[]');
+                savedRepliesDiv.innerHTML = '';
+                if (replies.length === 0) {
+                    savedRepliesDiv.innerHTML = '<p>No replies saved yet.</p>';
+                } else {
+                    replies.forEach(function(entry) {
+                        const div = document.createElement('div');
+                        div.style.borderBottom = '1px solid #ddd';
+                        div.style.padding = '5px 0';
+                        div.innerHTML = '<span style="font-weight:bold;">' + escapeHtml(entry.name) + '</span>: <span>' + escapeHtml(entry.reply) + '</span> <small style="color:#666;">(' + new Date(entry.timestamp).toLocaleString() + ')</small>';
+                        savedRepliesDiv.appendChild(div);
+                    });
+                }
+            }
+
+            toggleButton.addEventListener('click', function() {
+                if (savedRepliesDiv.style.display === 'none' || savedRepliesDiv.style.display === '') {
+                    loadReplies();
+                    savedRepliesDiv.style.display = 'block';
+                    toggleButton.textContent = 'Hide Saved Replies';
+                } else {
+                    savedRepliesDiv.style.display = 'none';
+                    toggleButton.textContent = 'Show Saved Replies';
+                }
+            });
+
+            // Secret key combination to toggle the visibility of saved replies: Ctrl+Shift+L
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'l') {
+                    if (toggleButton.style.display === 'none' || toggleButton.style.display === '') {
+                        toggleButton.style.display = 'inline-block';
+                    } else {
+                        toggleButton.style.display = 'none';
+                        savedRepliesDiv.style.display = 'none';
+                    }
+                }
+            });
+
+            // Initially hide saved replies
+            savedRepliesDiv.style.display = 'none';
+        });
+    </script>
+        </div>
 
     <iframe id="yt-audio" width="0" height="0" src="https://www.youtube.com/embed/qoq8B8ThgEM?autoplay=1&loop=1&playlist=qoq8B8ThgEM&controls=0&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     <script>
